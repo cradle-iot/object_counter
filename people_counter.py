@@ -223,6 +223,7 @@ while True:
 				# line, count the object
 				if direction < 0 and centroid[1] < W // 2:
 					totalLeft += 1
+					print("left!")
 					to.counted = True
 
 				# if the direction is positive (indicating the object
@@ -230,6 +231,7 @@ while True:
 				# center line, count the object
 				elif direction > 0 and centroid[1] > W // 2:
 					totalRight += 1
+					print("right!")
 					to.counted = True
 
 		# store the trackable object in our dictionary
