@@ -1,0 +1,13 @@
+{
+    "name": "people_counter",
+    "version": "",
+    "description": "",
+    "main": "people_counter.py",
+    "author": "",
+    "license": "",
+    "language":"python",
+    "scripts": {
+      "start": "/usr/bin/python3 people_counter.py -p mobilenet_ssd/MobileNetSSD_deploy.prototxt -m mobilenet_ssd/MobileNetSSD_deploy.caffemodel"
+    },
+    "dependency": null
+  }
