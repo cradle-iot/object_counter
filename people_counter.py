@@ -77,8 +77,8 @@ trackableObjects = {}
 # initialize the total number of frames processed thus far, along
 # with the total number of objects that have moved either up or down
 totalFrames = 0
-totalDown = 0
-totalUp = 0
+totalRight = 0
+totalLeft = 0
 
 # start the frames per second throughput estimator
 fps = FPS().start()
@@ -189,7 +189,7 @@ while True:
 	# draw a horizontal line in the center of the frame -- once an
 	# object crosses this line we will determine whether they were
 	# moving 'up' or 'down'
-	cv2.line(frame, (0, H // 2), (W, H // 2), (0, 255, 255), 2)
+	cv2.line(frame, (W // 2, 0), (W // 2, H), (0, 255, 255), 2)
 
 	# use the centroid tracker to associate the (1) old object
 	# centroids with (2) the newly computed object centroids
@@ -221,15 +221,15 @@ while True:
 				# if the direction is negative (indicating the object
 				# is moving up) AND the centroid is above the center
 				# line, count the object
-				if direction < 0 and centroid[1] < H // 2:
-					totalUp += 1
+				if direction < 0 and centroid[1] < W // 2:
+					totalLeft += 1
 					to.counted = True
 
 				# if the direction is positive (indicating the object
 				# is moving down) AND the centroid is below the
 				# center line, count the object
-				elif direction > 0 and centroid[1] > H // 2:
-					totalDown += 1
+				elif direction > 0 and centroid[1] > W // 2:
+					totalRight += 1
 					to.counted = True
 
 		# store the trackable object in our dictionary
@@ -245,8 +245,8 @@ while True:
 	# construct a tuple of information we will be displaying on the
 	# frame
 	info = [
-		("Up", totalUp),
-		("Down", totalDown),
+		("Left", totalLeft),
+		("Right", totalRight),
 		("Status", status),
 	]
 
