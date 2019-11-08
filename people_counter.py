@@ -215,25 +215,28 @@ while True:
 			# us in which direction the object is moving (negative for
 			# 'up' and positive for 'down')
 			y = [c[1] for c in to.centroids]
-			direction = centroid[1] - np.mean(y)
+			directionY = centroid[1] - np.mean(y)
+			x = [c[0] for c in to.centroids]
+			directionX = centroid[0] - np.mean(x)
 			to.centroids.append(centroid)
+			info = (np.mean(x), np.mean(y), centroid, directionX, directionY, to.centroids)
             
 			# check to see if the object has been counted or not
 			if not to.counted:
 				# if the direction is negative (indicating the object
 				# is moving up) AND the centroid is above the center
 				# line, count the object
-				if direction < 0 and centroid[1] < H // 2:
-					totalLeft += 1
-					print("up!", y, direction, centroid)
+				if directionY < 0 and centroid[1] < H // 2:
+					totalUp += 1
+					print("up!", info)
 					to.counted = True
 
 				# if the direction is positive (indicating the object
 				# is moving down) AND the centroid is below the
 				# center line, count the object
-				elif direction > 0 and centroid[1] > H // 2:
-					totalRight += 1
-					print("down!", y, direction, centroid)
+				elif directionY > 0 and centroid[1] > H // 2:
+					totalDown += 1
+					print("down!", info)
 					to.counted = True
 
 		# store the trackable object in our dictionary
@@ -265,7 +268,7 @@ while True:
 		writer.write(frame)
 
 	# show the output frame
-	cv2.imshow("Frame", frame)
+#	cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 
 	# if the `q` key was pressed, break from the loop
