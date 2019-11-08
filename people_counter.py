@@ -23,9 +23,9 @@ import cv2
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-p", "--prototxt", required=True,
+ap.add_argument("-p", "--prototxt", required=False,
 	help="path to Caffe 'deploy' prototxt file")
-ap.add_argument("-m", "--model", required=True,
+ap.add_argument("-m", "--model", required=False,
 	help="path to Caffe pre-trained model")
 ap.add_argument("-i", "--input", type=str,
 	help="path to optional input video file")
@@ -46,6 +46,8 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 
 # load our serialized model from disk
 print("[INFO] loading model...")
+args["prototxt"] = 'mobilenet_ssd/MobileNetSSD_deploy.prototxt'
+args["model"] = 'mobilenet_ssd/MobileNetSSD_deploy.caffemodel'
 net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 
 # if a video path was not supplied, grab a reference to the webcam
@@ -189,7 +191,7 @@ while True:
 	# draw a horizontal line in the center of the frame -- once an
 	# object crosses this line we will determine whether they were
 	# moving 'up' or 'down'
-	cv2.line(frame, (W // 2, 0), (W // 2, H), (0, 255, 255), 2)
+	cv2.line(frame, (0, H // 2), (W, H // 2), (0, 255, 255), 2)
 
 	# use the centroid tracker to associate the (1) old object
 	# centroids with (2) the newly computed object centroids
@@ -215,23 +217,23 @@ while True:
 			y = [c[1] for c in to.centroids]
 			direction = centroid[1] - np.mean(y)
 			to.centroids.append(centroid)
-
+            
 			# check to see if the object has been counted or not
 			if not to.counted:
 				# if the direction is negative (indicating the object
 				# is moving up) AND the centroid is above the center
 				# line, count the object
-				if direction < 0 and centroid[1] < W // 2:
+				if direction < 0 and centroid[1] < H // 2:
 					totalLeft += 1
-					print("left!")
+					print("up!", y, direction, centroid)
 					to.counted = True
 
 				# if the direction is positive (indicating the object
 				# is moving down) AND the centroid is below the
 				# center line, count the object
-				elif direction > 0 and centroid[1] > W // 2:
+				elif direction > 0 and centroid[1] > H // 2:
 					totalRight += 1
-					print("right!")
+					print("down!", y, direction, centroid)
 					to.counted = True
 
 		# store the trackable object in our dictionary
