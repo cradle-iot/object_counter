@@ -79,8 +79,8 @@ trackableObjects = {}
 # initialize the total number of frames processed thus far, along
 # with the total number of objects that have moved either up or down
 totalFrames = 0
-totalRight = 0
-totalLeft = 0
+totalDown = 0
+totalUp = 0
 
 # start the frames per second throughput estimator
 fps = FPS().start()
@@ -252,8 +252,8 @@ while True:
 	# construct a tuple of information we will be displaying on the
 	# frame
 	info = [
-		("Left", totalLeft),
-		("Right", totalRight),
+		("Up", totalUp),
+		("Down", totalDown),
 		("Status", status),
 	]
 
