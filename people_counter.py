@@ -15,16 +15,13 @@ from trackableobject import TrackableObject
 from imutils.video import VideoStream
 from imutils.video import FPS
 import numpy as np
-import argparse
 import imutils
-import time
 import dlib
 import cv2
-import os
-import pprint
-import sys
+import os, time, datetime, threading, pprint, argparse
+from putDynamo import insert
+#import osenv
 
-print(sys.argv)
 LR_Frag = 1
 
 # construct the argument parse and parse the arguments
@@ -229,10 +226,10 @@ while True:
 			directionX = centroid[0] - np.mean(x)
 			to.centroids.append(centroid)
 			info = {'ID': objectID,
-                   'np.mean':(np.mean(x), np.mean(y)),
-                   'centroid': centroid,
-                   'DirectionXY': (directionX, directionY),
-                   'to.centroids': to.centroids}
+                   'np.mean':(str(np.mean(x)), str(np.mean(y))),
+                   'centroid': str(centroid),
+                   'DirectionXY': (str(directionX), str(directionY)),
+                   'to.centroids': str(to.centroids)}
 			info = pprint.pformat(info)
             
 			# check to see if the object has been counted or not
@@ -244,6 +241,12 @@ while True:
 					totalUp += 1
 					print(info, "Up!")
 					to.counted = True
+					data_list = [{'timestamp': str(datetime.datetime.now()),
+                                  'device': os.environ['DEVICE'],
+                                  'data': {'direction': 'Up'}
+                                  }]
+					q = threading.Thread(target=insert, args=(data_list,))
+					q.start()
 
 				# if the direction is positive (indicating the object
 				# is moving down) AND the centroid is below the
@@ -252,17 +255,35 @@ while True:
 					totalDown += 1
 					print(info, "Down!")
 					to.counted = True
-                    
+					data_list = [{'timestamp': str(datetime.datetime.now()),
+                                  'device': os.environ['DEVICE'],
+                                  'data': {'direction': 'Down'}
+                                  }]
+					q = threading.Thread(target=insert, args=(data_list,))
+					q.start()
+
 			elif not to.counted and LR_Frag == 1:
 				if directionX < 0 and centroid[0] < W // 2:
 					totalLeft += 1
 					print(info, "Left!")
 					to.counted = True
+					data_list = [{'timestamp': str(datetime.datetime.now()),
+                                  'device': os.environ['DEVICE'],
+                                  'data': {'direction': 'Left'}
+                                  }]
+					q = threading.Thread(target=insert, args=(data_list,))
+					q.start()
 
 				elif directionX > 0 and centroid[0] > W // 2:
 					totalRight += 1
 					print(info, "Right!")
 					to.counted = True
+					data_list = [{'timestamp': str(datetime.datetime.now()),
+                                  'device': os.environ['DEVICE'],
+                                  'data': {'direction': 'Right'}
+                                  }]
+					q = threading.Thread(target=insert, args=(data_list,))
+					q.start()
 
 		# store the trackable object in our dictionary
 		trackableObjects[objectID] = to
