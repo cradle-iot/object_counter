@@ -293,7 +293,7 @@ while True:
 		writer.write(frame)
 
 	# show the output frame
-	if os.environ['OS'] == 'Windows_NT':
+	if os.environ.get('OS') == 'Windows_NT':
 		cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 
