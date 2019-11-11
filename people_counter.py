@@ -22,7 +22,9 @@ import dlib
 import cv2
 import os
 import pprint
+import sys
 
+print(sys.argv)
 LR_Frag = 1
 
 # construct the argument parse and parse the arguments
