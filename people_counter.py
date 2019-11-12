@@ -20,7 +20,9 @@ import dlib
 import cv2
 import os, time, datetime, threading, pprint, argparse
 from putDynamo import insert
-#import osenv
+
+try: import osenv
+except: pass
 
 LR_Frag = 1
 
