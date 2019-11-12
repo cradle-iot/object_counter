@@ -316,7 +316,7 @@ while True:
 		writer.write(frame)
 
 	# show the output frame
-	if os.environ.get('WINDOW') == 1:
+	if os.environ.get('WINDOW') == '1':
 		cv2.imshow("Frame", frame)
 	key = cv2.waitKey(1) & 0xFF
 
